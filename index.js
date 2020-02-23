@@ -16,7 +16,7 @@ function changeSpeed(value) {
 function randomizeArray() {
     const arrayLength = listSizeInput.value;
     let value = 0;
-    const array = Array.from({length: arrayLength}, () => Math.floor(Math.random() * arrayLength * 1000));
+    const array = Array.from({ length: arrayLength }, () => Math.floor(Math.random() * arrayLength * 1000));
 
     updateArrayInDOM(array);
 }
@@ -40,13 +40,12 @@ function updateArrayInDOM(array) {
 function startSearch() {
     clearResults();
 
-    switch(Number(search_algo.selectedOptions[0].id)) {
-        case 1 :
+    switch (Number(search_algo.selectedOptions[0].id)) {
+        case 1:
             linearSearch();
-            //perform linear search
             break;
         case 2:
-            //perform binary search
+            binarySearch();
             break;
         case 3:
             // perform Selection sort
@@ -60,41 +59,91 @@ function startSearch() {
 async function linearSearch() {
     toggleSearchingText(true);
     let startTimer = performance.now();
-    for(let i = 0; i < randomArray.length; i++) {
+    for (let i = 0; i < randomArray.length; i++) {
         let ele = randomArray[i];
         let elementInDOM = document.getElementById(`box_${ele}`);
-        if(elementInDOM.parentElement.previousSibling) {
-            elementInDOM.parentElement.previousSibling.children[0].classList.remove('box-scale', 'error');
-            // await wait();
+        if (document.getElementsByClassName('box-scale').length > 0) {
+            document.getElementsByClassName('box-scale')[0].classList.remove('box-scale', 'error', 'success');
         }
-    
-        if(ele === Number(searchInput.value)) {
+
+        if (ele === Number(searchInput.value)) {
             elementInDOM.classList.add('box-scale', 'success');
             displayResults(performance.now() - startTimer, Number(searchInput.value), true);
             break;
         } else {
-            if(i === (randomArray.length - 1)) {
+            if (i === (randomArray.length - 1)) {
                 displayResults(performance.now() - startTimer, Number(searchInput.value), false);
+            } else {
+                elementInDOM.classList.add('box-scale', 'error');
             }
-            elementInDOM.classList.add('box-scale', 'error');
         }
         await wait();
     }
 }
+
+async function binarySearch() {
+    toggleSearchingText(true);
+    let startTimer = performance.now();
+    let resultFound = false;;
+
+    randomArray.sort((a, b) => a - b);
+    updateArrayInDOM(randomArray);
+
+    let startIndex = 0;
+    let endIndex = randomArray.length - 1;
+    let mid = Math.floor((endIndex + startIndex) / 2);
+
+    if(endIndex - startIndex === 1) {
+        resultFound = true;
+        displayResults(performance.now() - startTimer, Number(searchInput.value), false);
+    }
+
+    while(!resultFound) {
+        let ele = randomArray[mid];
+        let elementInDOM = document.getElementById(`box_${ele}`);
+        if (document.getElementsByClassName('box-scale').length > 0) {
+            document.getElementsByClassName('box-scale')[0].classList.remove('box-scale', 'error', 'success');
+        }
+
+        if(ele > Number(searchInput.value)) {
+            endIndex = mid;
+            mid = Math.floor((endIndex + startIndex) / 2);
+        } else if (ele < Number(searchInput.value)) {
+            startIndex = mid;
+            mid = Math.floor((endIndex + startIndex) / 2);
+        }
+        
+        if(ele === Number(searchInput.value)) {
+            elementInDOM.classList.add('box-scale', 'success');
+            displayResults(performance.now() - startTimer, Number(searchInput.value), true);
+            resultFound = true;
+        } else {
+            elementInDOM.classList.add('box-scale', 'error');
+        }
+
+        if(endIndex - startIndex === 1) {
+            resultFound = true;
+            displayResults(performance.now() - startTimer, Number(searchInput.value), false);
+        }
+
+        await wait();
+    }
+}
+
 
 async function wait() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve(true);
         }, speed);
-    });     
+    });
 }
 
 function displayResults(timeTaken, searchEle, isSearchSuccessful) {
     toggleSearchingText(false);
     searchResult.innerHTML = `Found ${searchEle}`;
 
-    if(!isSearchSuccessful) {
+    if (!isSearchSuccessful) {
         searchResult.innerHTML = `Not ${searchResult.innerHTML}`;
     }
 
@@ -107,7 +156,7 @@ function clearResults() {
 }
 
 function toggleSearchingText(show) {
-    if(show) {
+    if (show) {
         document.getElementById('searching').classList.remove('hidden');
     } else {
         document.getElementById('searching').classList.add('hidden');
