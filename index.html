@@ -13,7 +13,7 @@
         <div class="inputs-box">
             <div>
                 <span> Choose algorithm</span>
-                <select id="search_algo">
+                <select id="search_algo" onchange="refreshOptions(this.selectedOptions[0].id)">
                     <option id=1> Linear search </option>
                     <option id=2> Binary search </option>
                     <option id=3> Selection sort </option>
@@ -35,12 +35,14 @@
         </div>
         <div class="actions-box">
             <button onclick="randomizeArray()"> Randomize Array </button>
-            <button onclick="startSearch()">Start search</button>
+            <button onclick="start()">Start</button>
         </div>
         <div class="results-box">
             <div id="search_result"></div>
+            <div id="sort_result"></div>
             <div id="time_taken"></div>
             <div id="searching" class="hidden">Searching...</div>
+            <div id="sorting" class="hidden">Sorting...</div>
         </div>
     </div>
     <div id="arrayDisplay">
