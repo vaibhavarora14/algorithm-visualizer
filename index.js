@@ -52,7 +52,7 @@ function start() {
             selectionSort();
             break;
         case 4:
-            // perform bubble sort
+            bubbleSort();
             break;
     }
 }
@@ -94,27 +94,27 @@ async function binarySearch() {
     let endIndex = randomArray.length - 1;
     let mid = Math.floor((endIndex + startIndex) / 2);
 
-    if(endIndex - startIndex === 1) {
+    if (endIndex - startIndex === 1) {
         resultFound = true;
         displaySearchResults(performance.now() - startTimer, Number(searchInput.value), false);
     }
 
-    while(!resultFound) {
+    while (!resultFound) {
         let ele = randomArray[mid];
         let elementInDOM = document.getElementById(`box_${ele}`);
         if (document.getElementsByClassName('box-scale').length > 0) {
             document.getElementsByClassName('box-scale')[0].classList.remove('box-scale', 'error', 'success');
         }
 
-        if(ele > Number(searchInput.value)) {
+        if (ele > Number(searchInput.value)) {
             endIndex = mid;
             mid = Math.floor((endIndex + startIndex) / 2);
         } else if (ele < Number(searchInput.value)) {
             startIndex = mid;
             mid = Math.floor((endIndex + startIndex) / 2);
         }
-        
-        if(ele === Number(searchInput.value)) {
+
+        if (ele === Number(searchInput.value)) {
             elementInDOM.classList.add('box-scale', 'success');
             displaySearchResults(performance.now() - startTimer, Number(searchInput.value), true);
             resultFound = true;
@@ -122,7 +122,7 @@ async function binarySearch() {
             elementInDOM.classList.add('box-scale', 'error');
         }
 
-        if(endIndex - startIndex === 1) {
+        if (endIndex - startIndex === 1) {
             resultFound = true;
             displaySearchResults(performance.now() - startTimer, Number(searchInput.value), false);
         }
@@ -136,27 +136,27 @@ async function selectionSort() {
     let startTimer = performance.now();
     for (let i = 0; i < randomArray.length; i++) {
         let ele = randomArray[i];
-        let smallestNumber = { 'position': i, 'number': ele};
+        let smallestNumber = { 'position': i, 'number': ele };
 
         document.querySelectorAll('.box-scale').forEach((ele) => {
             ele.classList.remove('box-scale', 'error', 'success');
         });
 
         document.getElementById(`box_${ele}`).classList.add('box-scale', 'error');
-        
-        for(let j = i + 1; j < randomArray.length; j++) {
+
+        for (let j = i + 1; j < randomArray.length; j++) {
             let ele_1 = randomArray[j];
-            document.getElementById(`box_${ele_1}`).classList.add('box-scale' ,'error');
-            
-            if(smallestNumber.number > ele_1) {
+            document.getElementById(`box_${ele_1}`).classList.add('box-scale', 'error');
+
+            if (smallestNumber.number > ele_1) {
                 smallestNumber.number = ele_1;
                 smallestNumber.position = j;
             }
             await wait();
-            document.getElementById(`box_${ele_1}`).classList.remove('box-scale' ,'error');
+            document.getElementById(`box_${ele_1}`).classList.remove('box-scale', 'error');
         }
 
-        if(smallestNumber.number !== ele) {
+        if (smallestNumber.number !== ele) {
             document.getElementById(`box_${ele}`).classList.remove('error');
             document.getElementById(`box_${ele}`).classList.add('success');
             document.getElementById(`box_${randomArray[smallestNumber.position]}`)
@@ -167,6 +167,47 @@ async function selectionSort() {
         }
         await wait();
     }
+    document.querySelectorAll('.box-scale').forEach((ele) => {
+        ele.classList.remove('box-scale', 'error', 'success');
+    });
+    displaySortingResults(performance.now() - startTimer);
+}
+
+async function bubbleSort() {
+    toggleSortingText(true);
+    let startTimer = performance.now();
+
+    document.querySelectorAll('.box-scale').forEach((ele) => {
+        ele.classList.remove('box-scale', 'error', 'success');
+    });
+
+    for (let i = 0; i < randomArray.length; i++) {
+        let ele = randomArray[i];
+        document.getElementById(`box_${ele}`).classList.add('box-scale', 'error');
+        
+        for (let j = i + 1; j < randomArray.length; j++) {
+            
+            document.getElementById(`box_${randomArray[j]}`).classList.add('box-scale', 'error');
+            if(randomArray[j] < ele && j > i) {
+                document.getElementById(`box_${randomArray[j]}`).classList.remove('error');
+                document.getElementById(`box_${randomArray[i]}`).classList.remove('error');
+                document.getElementById(`box_${randomArray[j]}`).classList.add('success');
+                document.getElementById(`box_${randomArray[i]}`).classList.add('success');
+                let temp = randomArray[j];
+                randomArray[j] = ele;
+                randomArray[i] = temp;
+                ele = randomArray[i];
+                updateArrayInDOM(randomArray);
+            }
+            await wait();
+        }
+        document.getElementById(`box_${ele}`).classList.remove('box-scale', 'error');
+        await wait();
+    }
+
+    document.querySelectorAll('.box-scale').forEach((ele) => {
+        ele.classList.remove('box-scale', 'error', 'success');
+    });
     displaySortingResults(performance.now() - startTimer);
 }
 
@@ -218,7 +259,7 @@ function toggleSortingText(show) {
 }
 
 function refreshOptions(id) {
-    if(Number(id) === 3 || Number(id) === 4) {
+    if (Number(id) === 3 || Number(id) === 4) {
         searchInput.disabled = true;
     } else {
         searchInput.disabled = false;
