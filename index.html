@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="index.css" />
+</head>
+
+<body>
+    <div class="top-container">
+        <div class="inputs-box">
+            <div>
+                <span> Choose algorithm</span>
+                <select id="search_algo">
+                    <option id=1> Linear search </option>
+                    <option id=2> Binary search </option>
+                    <option id=3> Selection sort </option>
+                    <option id=4> Bubble sort </option>
+                </select>
+            </div>
+            <div>
+                <span> Choose List size</span>
+                <input type="number" id="listSizeInput" min="2" value="2" onkeyup="randomizeArray()"/>
+            </div>
+            <div>
+                <span> Search element</span>
+                <input type="number" id="searchInput" />
+            </div>
+            <div>
+                <span> Decrease speed in milliseconds</span>
+                <input type="number" id="speedInput" onkeyup="changeSpeed(this.value)" value="0" />
+            </div>
+        </div>
+        <div class="actions-box">
+            <button onclick="randomizeArray()"> Randomize Array </button>
+            <button onclick="startSearch()">Start search</button>
+        </div>
+        <div class="results-box">
+            <div id="search_result"></div>
+            <div id="time_taken"></div>
+            <div id="searching" class="hidden">Searching...</div>
+        </div>
+    </div>
+    <div id="arrayDisplay">
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>

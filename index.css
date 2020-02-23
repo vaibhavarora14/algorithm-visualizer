@@ -1,0 +1,62 @@
+.inputs-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputs-box > div {
+    margin-bottom: 0.5rem;;
+}
+
+.actions-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.actions-box > button {
+    margin-bottom: 0.5rem;;
+}
+
+.top-container {
+    display: flex;
+}
+
+.top-container > div {
+    margin-right: 1rem;
+}
+
+#arrayDisplay >  ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#arrayDisplay > ul > li {
+    flex-basis: 70px;
+    padding: 0.5rem 1rem;
+    display: flex;
+}
+
+#arrayDisplay > ul > li > box {
+    border: 1px dotted black;
+    text-align: center; 
+    width: 100%;
+    /* transition: border .2s ease-in-out, transform 0.5s ease-in-out; */
+}
+
+#arrayDisplay > ul > li > .box-scale {
+    transform: scale(1.2);
+    border-style: solid;
+}
+
+#arrayDisplay > ul > li > .box-scale.error {
+    border-color: red;
+}
+
+#arrayDisplay > ul > li > .box-scale.success {
+    border-color: green;
+}
+
+.hidden {
+    display: none;
+}
+
